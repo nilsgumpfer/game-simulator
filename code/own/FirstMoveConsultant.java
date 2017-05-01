@@ -27,9 +27,11 @@ public class FirstMoveConsultant implements IMoveConsultant {
     }
 
     private void incorporateMove(Move move, PlayerColor playerColor){
-        int columnIndex = MyHelper.extractColumnIndex(move);
-        virtualGameBoard.addCoinToColumn(columnIndex, playerColor);
+        if(move != null) {
+            int columnIndex = MyHelper.extractColumnIndex(move);
+            virtualGameBoard.addCoinToColumn(columnIndex, playerColor);
 
-        System.out.println(virtualGameBoard);
+            //System.out.println(virtualGameBoard);
+        }
     }
 }

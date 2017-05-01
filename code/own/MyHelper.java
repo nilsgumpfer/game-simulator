@@ -14,6 +14,6 @@ public class MyHelper {
             return columnIndex;
         }
         else
-            return 0; //TODO: Create good exception-handling! (why is there a move with value null?!)
+            return -1;
     }
 }

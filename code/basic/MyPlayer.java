@@ -11,7 +11,7 @@ import java.util.List;
 public class MyPlayer extends Player {
     private IMoveConsultant moveConsultant = new FirstMoveConsultant();
 
-    //Position p => Offers several info about the current game-status
+    //Position p => Offers several info about the current game-status (it´s a copy, not a reference!)
     //List<Move> moves => List of next possible moves (e.g. one column already full, etc.)
     @Override
     Move nextMove(Position p, List<Move> moves) {

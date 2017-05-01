@@ -4,4 +4,21 @@ package own;
  * Created by Nils on 01.05.2017.
  */
 public enum PatternType {
+    Vertical_2,         //two coins
+    Vertical_2_pt,      //two coins, with potential on top
+    Vertical_3,         //three coins
+    Vertical_3_pt,      //two coins, with potential on top
+    Horizontal_2,       //two coins
+    Horizontal_2_pr,    //two coins, with potential on right side
+    Horizontal_2_pl,    //two coins, with potential on left side
+    Horizontal_3,       //three coins
+    Horizontal_3_pr,    //three coins, with potential on right side
+    Horizontal_3_pl,    //three coins, with potential on left side
+    Horizontal_3_plr,   //three coins, with potential on left and right side
+    Diagonal_2_hr,      //two coins, heading to upper right corner
+    Diagonal_2_hl,      //two coins, heading to upper left corner
+    //potential can be calculated considering depth of "canyon"/mandatory number of moves to reach diagonal
+    Diagonal_3_hr,      //three coins, heading to upper right corner
+    Diagonal_3_hl       //three coins, heading to upper left corner
+    //potential can be calculated considering depth of "canyon"/mandatory number of moves to reach diagonal
 }
