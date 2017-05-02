@@ -97,8 +97,6 @@ public class VirtualGameBoard {
 
     @Override
     public String toString(){
-        //TODO: Board is displayed 90° twisted, columns are rows and vice-versa
-
         String plainPortrayalOfBoard = "";
         String colorTemp = "";
         PlayerColor playerColorTemp = null;

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by Nils on 30.04.2017.
  */
-public class MyPlayer extends Player {
+public class NGPlayer extends Player {
     private IMoveConsultant moveConsultant = new FirstMoveConsultant();
 
     //Position p => Offers several info about the current game-status (it´s a copy, not a reference!)

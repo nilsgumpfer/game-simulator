@@ -22,8 +22,23 @@ public class FirstMoveConsultant implements IMoveConsultant {
 
     @Override
     public Move getBestPossibleMove(List<Move> possibleMoves) {
-        //TODO: This is currently dumb - create some awesome implementation!
-        return possibleMoves.get(possibleMoves.size()/2);
+        List<Integer> listOfPossibleColumns = MyHelper.extractPossibleColumnNumbers(possibleMoves);
+        int selectedColumn = listOfPossibleColumns.get(0);
+
+        // scan for all potentials of rival, planning to block them
+        List<VirtualPattern> verticalPatterns = PatternScanner.scanForVerticalPatternsForColor(virtualGameBoard, PlayerColor.Rival, true);
+
+        // print recognized patterns
+        System.out.println("Recognized Patterns: ");
+        for (VirtualPattern virtualPattern:verticalPatterns) {
+            System.out.println(virtualPattern);
+        }
+
+        // if possible patterns/potentials found, block them (here: just first one found)
+        if(verticalPatterns.size() > 0)
+            selectedColumn = verticalPatterns.get(0).getStartPosition().getHorizontalPosition() + 1;
+
+        return new Move(selectedColumn);
     }
 
     private void incorporateMove(Move move, PlayerColor playerColor){
@@ -31,7 +46,14 @@ public class FirstMoveConsultant implements IMoveConsultant {
             int columnIndex = MyHelper.extractColumnIndex(move);
             virtualGameBoard.addCoinToColumn(columnIndex, playerColor);
 
-            //System.out.println(virtualGameBoard);
+            System.out.println(virtualGameBoard);
+            /*
+            List<VirtualPattern> virtualPatternList = PatternScanner.scanForAllVerticalPatterns(virtualGameBoard);
+
+            System.out.println("Recognized Patterns: ");
+            for (VirtualPattern virtualPattern:virtualPatternList) {
+                System.out.println(virtualPattern);
+            }*/
         }
     }
 }
