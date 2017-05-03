@@ -2,58 +2,71 @@ package own;
 
 import basic.Move;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Nils on 30.04.2017.
  */
-public class FirstMoveConsultant implements IMoveConsultant {
-    private VirtualGameBoard virtualGameBoard = new VirtualGameBoard();
-
+public class FirstMoveConsultant extends AMoveConsultant
+{
     @Override
-    public void incorporateMoveOfRival(Move lastMove) {
+    public void incorporateRivalMove(Move lastMove) {
         incorporateMove(lastMove, PlayerColor.Rival);
     }
 
     @Override
-    public void incorporateMoveOfMyself(Move lastMove) {
+    public void incorporateOwnMove(Move lastMove) {
         incorporateMove(lastMove, PlayerColor.Own);
     }
 
     @Override
     public Move getBestPossibleMove(List<Move> possibleMoves) {
+        // TODO: act like this: if own potentials present, grow them. if rival potentials present, block them. if only one of them present, act same.
+        // consider blocking rival potentials only if critical (=3), block just at last moment, grow own potential from first point
+
         List<Integer> listOfPossibleColumns = MyHelper.extractPossibleColumnNumbers(possibleMoves);
         int selectedColumn = listOfPossibleColumns.get(0);
 
         // scan for all potentials of rival, planning to block them
-        List<VirtualPattern> verticalPatterns = PatternScanner.scanForVerticalPatternsForColor(virtualGameBoard, PlayerColor.Rival, true);
+        List<VirtualPattern> rivalPotential = scanHighPotentialPatterns(virtualGameBoard, PlayerColor.Rival);
+
+        // scan for all own potentials, planning to grow them
+        List<VirtualPattern> ownPotential = scanHighPotentialPatterns(virtualGameBoard, PlayerColor.Own);
+
+
+
+
+        /******************************************************************************************************/
+        // concat all patterns for displaying
+        List<VirtualPattern> allPatterns = new ArrayList<>();
+        allPatterns.addAll(rivalPotential);
+        allPatterns.addAll(ownPotential);
 
         // print recognized patterns
-        System.out.println("Recognized Patterns: ");
-        for (VirtualPattern virtualPattern:verticalPatterns) {
+        System.out.println("Recognized critical patterns: ");
+        for (VirtualPattern virtualPattern:allPatterns) {
             System.out.println(virtualPattern);
         }
+        /******************************************************************************************************/
 
-        // if possible patterns/potentials found, block them (here: just first one found)
-        if(verticalPatterns.size() > 0)
-            selectedColumn = verticalPatterns.get(0).getStartPosition().getHorizontalPosition() + 1;
+
+
+
+        // if critical patterns/potentials found, block them (here: just first one)
+        if(rivalPotential.size() > 0)
+            selectedColumn = rivalPotential.get(0).getStartPosition().getHorizontalPosition() + 1;
 
         return new Move(selectedColumn);
     }
 
-    private void incorporateMove(Move move, PlayerColor playerColor){
-        if(move != null) {
-            int columnIndex = MyHelper.extractColumnIndex(move);
-            virtualGameBoard.addCoinToColumn(columnIndex, playerColor);
+    private List<VirtualPattern> scanHighPotentialPatterns(VirtualGameBoard virtualGameBoard, PlayerColor playerColor){
+        // scan for all potentials
+        List<VirtualPattern> verticalPatterns = PatternScanner.scanForVerticalPatternsForColor(virtualGameBoard, playerColor, true);
 
-            System.out.println(virtualGameBoard);
-            /*
-            List<VirtualPattern> virtualPatternList = PatternScanner.scanForAllVerticalPatterns(virtualGameBoard);
+        // filter just high potentials, here: 3 and more
+        verticalPatterns = MyHelper.filterHighPotentials(verticalPatterns);
 
-            System.out.println("Recognized Patterns: ");
-            for (VirtualPattern virtualPattern:virtualPatternList) {
-                System.out.println(virtualPattern);
-            }*/
-        }
+        return verticalPatterns;
     }
 }
