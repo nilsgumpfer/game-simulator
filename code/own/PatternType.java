@@ -19,6 +19,11 @@ public enum PatternType {
     Diagonal_2_hl,      //two coins, heading to upper left corner
     //potential can be calculated considering depth of "canyon"/mandatory number of moves to reach diagonal
     Diagonal_3_hr,      //three coins, heading to upper right corner
+    Horizontal_2_plr,
+    Horizontal_2_plr_d,
+    Horizontal_2_pl_d,
+    Horizontal_2_pr_d,
     Diagonal_3_hl       //three coins, heading to upper left corner
+
     //potential can be calculated considering depth of "canyon"/mandatory number of moves to reach diagonal
 }

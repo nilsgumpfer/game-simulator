@@ -55,18 +55,21 @@ public class FirstMoveConsultant extends AMoveConsultant
 
         // if critical patterns/potentials found, block them (here: just first one)
         if(rivalPotential.size() > 0)
-            selectedColumn = rivalPotential.get(0).getStartPosition().getHorizontalPosition() + 1;
+            selectedColumn = rivalPotential.get(0).getListOfGaps().get(0) + 1;
 
         return new Move(selectedColumn);
     }
 
     private List<VirtualPattern> scanHighPotentialPatterns(VirtualGameBoard virtualGameBoard, PlayerColor playerColor){
         // scan for all potentials
-        List<VirtualPattern> verticalPatterns = PatternScanner.scanForVerticalPatternsForColor(virtualGameBoard, playerColor, true);
+        List<VirtualPattern> allPotentials = PatternScanner.scanForAllPatternsForColor(virtualGameBoard, playerColor, true);
 
         // filter just high potentials, here: 3 and more
-        verticalPatterns = MyHelper.filterHighPotentials(verticalPatterns);
+        allPotentials = MyHelper.filterPotentials(allPotentials, 2);
 
-        return verticalPatterns;
+        // sort Potentials descending
+        allPotentials = MyHelper.sortPatternsOnPotentials(allPotentials);
+
+        return allPotentials;
     }
 }
