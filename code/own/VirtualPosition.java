@@ -11,6 +11,7 @@ public class VirtualPosition {
     private boolean tmpIsPartOfVerticalPattern      = false;
     private boolean tmpIsPartOfHorizontalPattern    = false;
     private boolean tmpIsPartOfDiagonalPattern      = false;
+    private int potentialRating = -1;
 
     public VirtualPosition(int horizontalPosition, int verticalPosition) {
         this.horizontalPosition = horizontalPosition;
@@ -77,5 +78,13 @@ public class VirtualPosition {
 
     public void setTmpIsPartOfDiagonalPattern(boolean tmpIsPartOfDiagonalPattern) {
         this.tmpIsPartOfDiagonalPattern = tmpIsPartOfDiagonalPattern;
+    }
+
+    public int getPotentialRating() {
+        return potentialRating;
+    }
+
+    public void setPotentialRating(int potentialRating) {
+        this.potentialRating = potentialRating;
     }
 }
