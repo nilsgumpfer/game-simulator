@@ -51,16 +51,20 @@ public class PatternScanner {
         return  listOfVirtualPatterns;
     }
 
-    public static  List<VirtualPattern> scanForAllHorizontalPatterns(VirtualGameBoard virtualGameBoard, boolean onlyPotentials) {
+    public static  List<VirtualPattern> scanForAllHorizontalPatterns(VirtualGameBoard virtualGameBoard, boolean onlyPotentials)
+    {
         List<VirtualPattern> listOfVirtualPatterns = new ArrayList<>();
+
         listOfVirtualPatterns.addAll(scanForHorizontalPatternsForColor(virtualGameBoard,PlayerColor.Own, onlyPotentials));
         listOfVirtualPatterns.addAll(scanForHorizontalPatternsForColor(virtualGameBoard,PlayerColor.Rival, onlyPotentials));
 
         return  listOfVirtualPatterns;
     }
 
-    public static  List<VirtualPattern> scanForAllDiagonalPatterns(VirtualGameBoard virtualGameBoard) {
+    public static  List<VirtualPattern> scanForAllDiagonalPatterns(VirtualGameBoard virtualGameBoard)
+    {
         List<VirtualPattern> listOfVirtualPatterns = new ArrayList<>();
+
         listOfVirtualPatterns.addAll(scanForDiagonalPatternsForColor(virtualGameBoard,PlayerColor.Own));
         listOfVirtualPatterns.addAll(scanForDiagonalPatternsForColor(virtualGameBoard,PlayerColor.Rival));
 
@@ -264,9 +268,155 @@ public class PatternScanner {
         return listOfVirtualPatterns;
     }
 
-    public static  List<VirtualPattern> scanForDiagonalPatternsForColor(VirtualGameBoard virtualGameBoard, PlayerColor playerColor) {
-        return new ArrayList<>();
+    public static  List<VirtualPattern> scanForDiagonalPatternsForColor(VirtualGameBoard virtualGameBoard, PlayerColor playerColor)
+    {
+        List<VirtualPattern> listOfVirtualPatterns = new ArrayList<>();
+
+        listOfVirtualPatterns.addAll(scanForAllDiagonalPatterns(virtualGameBoard,PlayerColor.Own));
+        listOfVirtualPatterns.addAll(scanForAllDiagonalPatterns(virtualGameBoard,PlayerColor.Rival));
+        listOfVirtualPatterns.addAll(scanForAllDiagonalPatterns(virtualGameBoard,PlayerColor.Own));
+        listOfVirtualPatterns.addAll(scanForAllDiagonalPatterns(virtualGameBoard,PlayerColor.Rival));
+
+        return  listOfVirtualPatterns;
     }
+
+    private static List<VirtualPattern> scanForAllDiagonalPatterns(VirtualGameBoard virtualGameBoard, PlayerColor playerColor)
+    {
+        List<VirtualPattern> listOfVirtualPatterns = new ArrayList<>();
+
+        listOfVirtualPatterns.addAll(scanForDiagonalPatterns(virtualGameBoard,PlayerColor.Own, ScanDirection.UpperLeftToLowerRight));
+        listOfVirtualPatterns.addAll(scanForDiagonalPatterns(virtualGameBoard,PlayerColor.Own, ScanDirection.UpperRightToLowerLeft));
+
+        listOfVirtualPatterns.addAll(scanForDiagonalPatterns(virtualGameBoard,PlayerColor.Rival, ScanDirection.UpperLeftToLowerRight));
+        listOfVirtualPatterns.addAll(scanForDiagonalPatterns(virtualGameBoard,PlayerColor.Rival, ScanDirection.UpperRightToLowerLeft));
+
+        listOfVirtualPatterns.addAll(scanForDiagonalPatterns(virtualGameBoard,PlayerColor.Own, ScanDirection.UpperLeftToLowerRight));
+        listOfVirtualPatterns.addAll(scanForDiagonalPatterns(virtualGameBoard,PlayerColor.Own, ScanDirection.UpperRightToLowerLeft));
+
+        listOfVirtualPatterns.addAll(scanForDiagonalPatterns(virtualGameBoard,PlayerColor.Rival, ScanDirection.UpperLeftToLowerRight));
+        listOfVirtualPatterns.addAll(scanForDiagonalPatterns(virtualGameBoard,PlayerColor.Rival, ScanDirection.UpperRightToLowerLeft));
+
+        return  listOfVirtualPatterns;
+    }
+
+    private static List<VirtualPattern> scanForDiagonalPatterns(VirtualGameBoard virtualGameBoard, PlayerColor playerColor, ScanDirection scanDirection)
+    {
+        List<VirtualPosition> listOfStartPositions = MyHelper.getStartPositionsForDirection(virtualGameBoard, scanDirection);
+        List<VirtualPattern> listOfVirtualPatterns = new ArrayList<>();
+        VirtualPosition[][] arrayOfPositions = virtualGameBoard.getArrayOfPositions();
+
+        int sizeVertical = virtualGameBoard.getListOfRows().size();
+        int sizeHorizontal = virtualGameBoard.getListOfColumns().size();
+
+        for (VirtualPosition currentStartPosition:listOfStartPositions) {
+            // start at position
+            int iV = currentStartPosition.getVerticalPosition();
+            int iH = currentStartPosition.getHorizontalPosition();
+
+            // as long as position is not out of bounds, look for chains of equal colors heading from corner to corner or parallel
+            while(MyHelper.checkPosition(iH,iV,sizeHorizontal-1, sizeVertical-1))
+            {
+                // get position by using indexes
+                VirtualPosition currentPosition = arrayOfPositions[iH][iV];
+
+                // look for correct color, then start scanning further
+                if(currentPosition.getPlayerColor() == playerColor)
+                {
+                    // go on only if this position is not already part of before recognized pattern
+                    if(currentPosition.isTmpIsPartOfDiagonalPattern() == false)
+                    {
+                        VirtualPosition patternStartPosition = currentPosition;
+                        VirtualPosition patternEndPosition = null;
+                        int gap = 1;
+                        int chainLength = 1;
+                        boolean goOn = true;
+                        VirtualPosition tmpNextPosition = null;
+
+                        // go on only if position isn´t part of pattern already
+                        if(currentPosition.isTmpIsPartOfHorizontalPattern())
+                            goOn = false;
+
+                        while(goOn)
+                        {
+                            // check if you´re already at the edge of your row
+                            if (MyHelper.checkPosition(iH + gap,iV + gap,sizeHorizontal-1, sizeVertical-1))
+                            {
+                                tmpNextPosition = arrayOfPositions[iH + gap][iV + gap];
+
+                                // if same color, chain
+                                if(tmpNextPosition.getPlayerColor() == playerColor)
+                                {
+                                    // mark start-position as used
+                                    currentPosition.setTmpIsPartOfDiagonalPattern(true);
+
+                                    // mark found position as used
+                                    tmpNextPosition.setTmpIsPartOfDiagonalPattern(true);
+
+                                    // temporary save this found position as end-position of pattern
+                                    patternEndPosition = tmpNextPosition;
+
+                                    // increase number of found occurences
+                                    chainLength++;
+                                }
+                                else
+                                {
+                                    // if end of chain reached, break loop
+                                    goOn = false;
+                                }
+
+                            }
+                            else
+                            {
+                                // if end of bounds reached, break loop
+                                goOn = false;
+                            }
+
+                            // increase gap-counter
+                            gap++;
+                        }
+
+                        // go on only if pattern was found
+                        if(chainLength > 1)
+                        {
+                            // define pattern-type using chain-length and if potential is present
+                            PatternType patternType = checkDiagonalPotential(virtualGameBoard, patternStartPosition, patternEndPosition, chainLength);
+
+                            //TODO: GO ON HERE, test this stuff! ;D
+
+                            // generate new pattern-object and save it
+                            listOfVirtualPatterns.add(new VirtualPattern(patternStartPosition, patternEndPosition, patternType, playerColor));
+                        }
+                    }
+                }
+
+                if(scanDirection == ScanDirection.UpperRightToLowerLeft)
+                    iH--;
+                else
+                    iH++;
+
+                iV++;
+            }
+
+            // reset all flags, previously set for temporary pattern recognition
+            flushPatternFlagsOfBoard(virtualGameBoard);
+
+
+        }
+
+        return listOfVirtualPatterns;
+    }
+
+    private static PatternType checkDiagonalPotential(VirtualGameBoard virtualGameBoard, VirtualPosition patternStartPosition, VirtualPosition patternEndPosition, int chainLength) {
+        switch(chainLength){
+            case 2:
+                return PatternType.Diagonal_2;
+            case 3:
+                return PatternType.Diagonal_3;
+            default:
+                return PatternType.Diagonal_UNKNOWN;
+        }
+    }
+
 
     public static PatternType checkHorizontalPotential(VirtualGameBoard virtualGameBoard, VirtualPosition patternStartPosition, VirtualPosition patternEndPosition, int patternSize){
         VirtualPosition[][] arrayOfPositions = virtualGameBoard.getArrayOfPositions();

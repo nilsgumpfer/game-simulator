@@ -186,4 +186,41 @@ public class MyHelper {
 
         return listOfGaps;
     }
+
+    public static List<VirtualPosition> getStartPositionsForDirection(VirtualGameBoard virtualGameBoard, ScanDirection scanDirection)
+    {
+        List<VirtualPosition> listOfStartPositions = new ArrayList<>();
+        List<List<VirtualPosition>> listOfRows = virtualGameBoard.getListOfRows();
+
+        int rowCount = listOfRows.size();
+        int columnCount = virtualGameBoard.getListOfColumns().size();
+        int relevantIndex = 0;
+
+        switch (scanDirection){
+            case UpperLeftToLowerRight:
+                relevantIndex = 0;  // start at left-most position
+                break;
+            case UpperRightToLowerLeft:
+                relevantIndex = columnCount - 1; // start at right-most position
+                break;
+        }
+
+        // read and add every item of top-row / header-row
+        for(int i=0; i<columnCount; i++)
+        {
+            listOfStartPositions.add(listOfRows.get(0).get(i));
+        }
+
+        // read and add items at left-most position OR at right-most position
+        for(int i=1; i<rowCount; i++)
+        {
+            listOfStartPositions.add(listOfRows.get(i).get(relevantIndex));
+        }
+
+        return listOfStartPositions;
+    }
+
+    public static boolean checkPosition(int iCurrentH, int iCurrentV, int iMaxH, int iMaxV){
+        return iCurrentH >= 0 && iCurrentH <= iMaxH && iCurrentV >= 0 && iCurrentV <= iMaxV;
+    }
 }
