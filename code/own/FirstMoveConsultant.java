@@ -34,10 +34,8 @@ public class FirstMoveConsultant extends AMoveConsultant
         // scan for all own potentials, planning to grow them
         List<VirtualPattern> ownPotential = scanHighPotentialPatterns(virtualGameBoard, PlayerColor.Own);
 
-
-
-
         /******************************************************************************************************/
+        /*
         // concat all patterns for displaying
         List<VirtualPattern> allPatterns = new ArrayList<>();
         allPatterns.addAll(rivalPotential);
@@ -47,15 +45,13 @@ public class FirstMoveConsultant extends AMoveConsultant
         System.out.println("Recognized critical patterns: ");
         for (VirtualPattern virtualPattern:allPatterns) {
             System.out.println(virtualPattern);
-        }
+        }*/
         /******************************************************************************************************/
 
-
-
-
-        // if critical patterns/potentials found, block them (here: just first one)
+        // if critical patterns/potentials found, block them (here: just first one) //TODO: make this smarter!
         if(rivalPotential.size() > 0)
-            selectedColumn = rivalPotential.get(0).getListOfGaps().get(0) + 1;
+            if(rivalPotential.get(0).getListOfGaps().size() > 0)
+                selectedColumn = rivalPotential.get(0).getListOfGaps().get(0) + 1;
 
         return new Move(selectedColumn);
     }
@@ -65,10 +61,10 @@ public class FirstMoveConsultant extends AMoveConsultant
         List<VirtualPattern> allPotentials = PatternScanner.scanForAllPatternsForColor(virtualGameBoard, playerColor, true);
 
         // filter just high potentials, here: 3 and more
-        allPotentials = MyHelper.filterPotentials(allPotentials, 2);
+        //allPotentials = MyHelper.filterPotentials(allPotentials, 2); //TODO: just for testing
 
         // sort Potentials descending
-        allPotentials = MyHelper.sortPatternsOnPotentials(allPotentials);
+        //allPotentials = MyHelper.sortPatternsOnPotentials(allPotentials); //TODO: just for testing
 
         return allPotentials;
     }

@@ -21,6 +21,8 @@ public class VirtualPattern {
         this.playerColor = playerColor;
         potentialRating = MyHelper.scorePotentialOfPattern(this);
         listOfGaps = MyHelper.readGapsOfPattern(this);
+
+        System.out.println("Created new Pattern:" + this);
     }
 
     public VirtualPosition getStartPosition() {

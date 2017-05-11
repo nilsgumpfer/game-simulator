@@ -20,14 +20,8 @@ public abstract class AMoveConsultant
             int columnIndex = MyHelper.extractColumnIndex(move);
             virtualGameBoard.addCoinToColumn(columnIndex, playerColor);
 
+            // print current status of board
             System.out.println(virtualGameBoard);
-            /*
-            List<VirtualPattern> virtualPatternList = PatternScanner.scanForAllVerticalPatterns(virtualGameBoard);
-
-            System.out.println("Recognized Patterns: ");
-            for (VirtualPattern virtualPattern:virtualPatternList) {
-                System.out.println(virtualPattern);
-            }*/
         }
     }
 }

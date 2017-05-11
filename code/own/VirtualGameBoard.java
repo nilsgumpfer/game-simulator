@@ -104,7 +104,7 @@ public class VirtualGameBoard {
 
         plainPortrayalOfBoard += '\n';
         plainPortrayalOfBoard += '\n';
-        plainPortrayalOfBoard += "VIRTUAL GAMEBOARD EXPORT";
+        plainPortrayalOfBoard += "VIRTUAL GAMEBOARD";
         plainPortrayalOfBoard += '\n';
 
         plainPortrayalOfBoard += "\\";
@@ -136,7 +136,6 @@ public class VirtualGameBoard {
                 }
 
                 plainPortrayalOfBoard += "|" + colorTemp;
-
             }
 
             plainPortrayalOfBoard += "|";

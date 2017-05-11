@@ -223,4 +223,12 @@ public class MyHelper {
     public static boolean checkPosition(int iCurrentH, int iCurrentV, int iMaxH, int iMaxV){
         return iCurrentH >= 0 && iCurrentH <= iMaxH && iCurrentV >= 0 && iCurrentV <= iMaxV;
     }
+
+    public static void flushPatternFlagsOfBoard(VirtualGameBoard virtualGameBoard){
+        for (List<VirtualPosition> currentColumn:virtualGameBoard.getListOfColumns()) {
+            for (VirtualPosition virtualPosition:currentColumn) {
+                virtualPosition.flushPatternFlags();
+            }
+        }
+    }
 }
