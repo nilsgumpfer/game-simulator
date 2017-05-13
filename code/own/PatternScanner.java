@@ -10,7 +10,7 @@ public class PatternScanner {
     public static List<VirtualPattern> scanForAllPatterns(VirtualGameBoard virtualGameBoard, boolean onlyPotentials){
         List<VirtualPattern> listOfVirtualPatterns = new ArrayList<>();
 
-        // TODO: GO ON HERE --> iterate through Array of Positions and check if neighbors are same-colored,
+        // iterate through Array of Positions and check if neighbors are same-colored,
         // if so, follow this "direction" and count length of uninterrupted chain, but also consider potentials
         // in same direction (1-coin-gaps), consider only looking in one direction / only recognizing patterns once,
         // so maybe mark positions checked in one direction, e.g. vertical, then go on horizontal, etc.)
@@ -153,7 +153,7 @@ public class PatternScanner {
                         if(chainLength > 1)
                         {
                             // generate new pattern-object and save it
-                            listOfVirtualPatterns.add(new VirtualPattern(PatternType.Diagonal, patternStartPosition, patternEndPosition, virtualGameBoard, chainLength, playerColor, ScanDirection.TopToBottom));
+                            listOfVirtualPatterns.add(new VirtualPattern(PatternType.Vertical, patternStartPosition, patternEndPosition, virtualGameBoard, chainLength, playerColor, ScanDirection.TopToBottom));
                         }
                     }
                 }
@@ -237,7 +237,7 @@ public class PatternScanner {
                         if(chainLength > 1)
                         {
                             // generate new pattern-object and save it
-                            listOfVirtualPatterns.add(new VirtualPattern(PatternType.Diagonal, patternStartPosition, patternEndPosition, virtualGameBoard, chainLength, playerColor, ScanDirection.LeftToRight));
+                            listOfVirtualPatterns.add(new VirtualPattern(PatternType.Horizontal, patternStartPosition, patternEndPosition, virtualGameBoard, chainLength, playerColor, ScanDirection.LeftToRight));
                         }
                     }
                 }
@@ -364,111 +364,5 @@ public class PatternScanner {
         }
 
         return listOfVirtualPatterns;
-    }
-
-    private static PatternType checkDiagonalPotential(VirtualGameBoard virtualGameBoard, ScanDirection scanDirection, VirtualPosition patternStartPosition, VirtualPosition patternEndPosition, int chainLength)
-    {
-        switch(chainLength){
-            case 2:
-                if(scanDirection == ScanDirection.UpperLeftToLowerRight)
-                    return PatternType.Diagonal_ullr_2;
-                else
-                    return PatternType.Diagonal_urll_2;
-            case 3:
-                if(scanDirection == ScanDirection.UpperLeftToLowerRight)
-                    return PatternType.Diagonal_ullr_3;
-                else
-                    return PatternType.Diagonal_urll_3;
-            default:
-                return PatternType.Diagonal_UNKNOWN;
-        }
-    }
-
-
-    public static PatternType checkHorizontalPotential(VirtualGameBoard virtualGameBoard, VirtualPosition patternStartPosition, VirtualPosition patternEndPosition, int patternSize){
-        VirtualPosition[][] arrayOfPositions = virtualGameBoard.getArrayOfPositions();
-        int checkPositionLeftV = patternStartPosition.getVerticalPosition();
-        int checkPositionLeftH = patternStartPosition.getHorizontalPosition() - 1; // go on left to get neighbor
-        int checkPositionRightV = patternEndPosition.getVerticalPosition();
-        int checkPositionRightH = patternEndPosition.getHorizontalPosition() + 1; // go on right to get neighbor
-        int maxV = virtualGameBoard.getListOfRows().size();
-        int maxH = virtualGameBoard.getListOfColumns().size();
-        boolean hasPotentialOnLeftSide = false;
-        boolean hasPotentialOnRightSide = false;
-        boolean hasDangerousPotentialOnLeftSide = false;
-        boolean hasDangerousPotentialOnRightSide = false;
-        PatternType patternType = null;
-        PlayerColor playerColor = patternStartPosition.getPlayerColor();
-
-        // ensure position has valid indexes
-        if(checkPositionLeftH >= 0 && checkPositionLeftH < maxH && checkPositionLeftV >=0 && checkPositionLeftV < maxV)
-        {
-            // check potential on left side
-            if(arrayOfPositions[checkPositionLeftH][checkPositionLeftV].getPlayerColor() == PlayerColor.Empty)
-                hasPotentialOnLeftSide = true;
-        }
-
-        // ensure position has valid indexes
-        if(checkPositionRightH >= 0 && checkPositionRightH < maxH && checkPositionRightV >=0 && checkPositionRightV < maxV)
-        {
-            // check potential on right side
-            if(arrayOfPositions[checkPositionRightH][checkPositionRightV].getPlayerColor() == PlayerColor.Empty)
-                hasPotentialOnRightSide = true;
-        }
-
-        // go on and check if dangerous one-coin gap is present
-        checkPositionLeftH--;
-        checkPositionRightH++;
-
-        // ensure position has valid indexes
-        if(checkPositionRightH >= 0 && checkPositionRightH < maxH && checkPositionRightV >=0 && checkPositionRightV < maxV)
-        {
-            // check dangerous potential on right side
-            if(arrayOfPositions[checkPositionRightH][checkPositionRightV].getPlayerColor() == playerColor)
-                hasDangerousPotentialOnRightSide = true;
-        }
-
-        if(checkPositionLeftH >= 0 && checkPositionLeftH < maxH && checkPositionLeftV >=0 && checkPositionLeftV < maxV)
-        {
-            // check potential on left side
-            if(arrayOfPositions[checkPositionLeftH][checkPositionLeftV].getPlayerColor() == playerColor)
-                hasDangerousPotentialOnLeftSide = true;
-        }
-
-        // define pattern-type using chain-length and if potential is present
-        switch (patternSize)
-        {
-            case 2:
-                if(hasPotentialOnLeftSide && hasPotentialOnRightSide)
-                    if(hasDangerousPotentialOnLeftSide && hasDangerousPotentialOnRightSide)
-                        patternType = PatternType.Horizontal_2_plr_d;
-                    else
-                        patternType = PatternType.Horizontal_2_plr;
-                else if(hasPotentialOnLeftSide)
-                    if(hasDangerousPotentialOnLeftSide)
-                        patternType = PatternType.Horizontal_2_pl_d;
-                    else
-                        patternType = PatternType.Horizontal_2_pl;
-                else if(hasPotentialOnRightSide)
-                    if(hasDangerousPotentialOnRightSide)
-                        patternType = PatternType.Horizontal_2_pr_d;
-                    else
-                        patternType = PatternType.Horizontal_2_pr;
-                else
-                    patternType = PatternType.Horizontal_2;
-                break;
-            case 3:
-                if(hasPotentialOnLeftSide && hasPotentialOnRightSide)
-                    patternType = PatternType.Horizontal_3_plr;
-                else if(hasPotentialOnLeftSide)
-                    patternType = PatternType.Horizontal_3_pl;
-                else if(hasPotentialOnRightSide)
-                    patternType = PatternType.Horizontal_3_pr;
-                else
-                    patternType = PatternType.Horizontal_3;
-                break;
-        }
-
-        return patternType;
     }
 }

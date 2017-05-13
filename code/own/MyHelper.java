@@ -143,6 +143,7 @@ public class MyHelper {
         List<VirtualPotential> virtualPotentialList = new ArrayList<>();
 
         VirtualPosition[][] arrayOfPositions = virtualGameBoard.getArrayOfPositions();
+        VirtualPosition currentPosition = startPosition;
 
         int sizeHorizontal  = virtualGameBoard.getListOfColumns().size();
         int sizeVertical    = virtualGameBoard.getListOfRows().size();
@@ -152,13 +153,13 @@ public class MyHelper {
         iV = nextVerticalIndex(iV,scanDirection);
         iH = nextHorizontalIndex(iH,scanDirection);
 
-        VirtualPosition currentPosition = arrayOfPositions[iH][iV];
-
         while(MyHelper.checkPositionStillInBounds(iH,iV,sizeHorizontal-1, sizeVertical-1))
         {
+            currentPosition = arrayOfPositions[iH][iV];
+
             if(currentPosition.getPlayerColor() == PlayerColor.Empty)
                 virtualPotentialList.add(new VirtualPotential(scanDirection,currentPosition,getGapDepthUnderneathPosition(virtualGameBoard,currentPosition)));
-            else
+            else if(currentPosition.getPlayerColor() != startPosition.getPlayerColor())
                 break;
 
             iV = nextVerticalIndex(iV,scanDirection);
@@ -171,6 +172,7 @@ public class MyHelper {
     private static int getGapDepthUnderneathPosition(VirtualGameBoard virtualGameBoard, VirtualPosition startPosition)
     {
         VirtualPosition[][] arrayOfPositions = virtualGameBoard.getArrayOfPositions();
+        VirtualPosition currentPosition = startPosition;
 
         int depthCounter    = 0;
         int sizeHorizontal  = virtualGameBoard.getListOfColumns().size();
@@ -178,10 +180,10 @@ public class MyHelper {
         int iV              = startPosition.getVerticalPosition() + 1; // one position underneath
         int iH              = startPosition.getHorizontalPosition();
 
-        VirtualPosition currentPosition = arrayOfPositions[iH][iV];
-
         while(MyHelper.checkPositionStillInBounds(iH,iV,sizeHorizontal-1, sizeVertical-1))
         {
+            currentPosition = arrayOfPositions[iH][iV];
+
             if(currentPosition.getPlayerColor() == PlayerColor.Empty)
                 depthCounter++;
             else

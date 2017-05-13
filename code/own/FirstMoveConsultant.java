@@ -48,7 +48,7 @@ public class FirstMoveConsultant extends AMoveConsultant
         }*/
         /******************************************************************************************************/
 
-        
+
 
         return new Move(selectedColumn);
     }

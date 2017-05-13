@@ -22,7 +22,7 @@ public class TestMyStuff {
         moveList.add(new Move(6));
         moveList.add(new Move(7));
 
-        moveConsultant.incorporateOwnMove(new Move(1));
+        //moveConsultant.incorporateOwnMove(new Move(1));
         moveConsultant.incorporateOwnMove(new Move(2));
         moveConsultant.incorporateOwnMove(new Move(3));
         moveConsultant.incorporateRivalMove(new Move(4));
@@ -30,6 +30,7 @@ public class TestMyStuff {
         moveConsultant.incorporateRivalMove(new Move(3));
         moveConsultant.incorporateRivalMove(new Move(4));
         moveConsultant.incorporateOwnMove(new Move(3));
+        moveConsultant.incorporateOwnMove(new Move(4));
         moveConsultant.incorporateOwnMove(new Move(4));
 
         moveConsultant.getBestPossibleMove(moveList);
