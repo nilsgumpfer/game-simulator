@@ -46,6 +46,9 @@ public class MyHelper {
 
     public static int scorePotentialOfPattern(VirtualPattern virtualPattern)
     {
+        //TODO: this is kind of static - rely on patternType, potentials and gap-depth
+        //TODO: other idea: don´t score patterns itself, but their recognized potentials! ..collect all potentials in one pool and rank them according to their "distance" to possible success
+        //TODO: build a merger which is responsible for collecting all potentials and combine them if on same position
         switch(virtualPattern.getPatternType())
         {
             // 2-chained, uncritical
@@ -197,13 +200,13 @@ public class MyHelper {
             case UpperLeftToLowerRight:
                 return ++currentIndex;
             case LeftToRight:
-                return ++currentIndex;
+                return currentIndex;
             case TopToBottom:
                 return ++currentIndex;
             case LowerRightToUpperLeft:
                 return --currentIndex;
             case RightToLeft:
-                return --currentIndex;
+                return currentIndex;
             case BottomToTop:
                 return --currentIndex;
             case LowerLeftToUpperRight:
@@ -211,7 +214,7 @@ public class MyHelper {
             case UpperRightToLowerLeft:
                 return ++currentIndex;
             default:
-                return currentIndex; // this case should never happen
+                return currentIndex; // this case should never occur
         }
     }
 
@@ -224,19 +227,19 @@ public class MyHelper {
             case LeftToRight:
                 return ++currentIndex;
             case TopToBottom:
-                return ++currentIndex;
+                return currentIndex;
             case LowerRightToUpperLeft:
                 return --currentIndex;
             case RightToLeft:
                 return --currentIndex;
             case BottomToTop:
-                return --currentIndex;
+                return currentIndex;
             case LowerLeftToUpperRight:
                 return --currentIndex;
             case UpperRightToLowerLeft:
                 return ++currentIndex;
             default:
-                return currentIndex; // this case should never happen
+                return currentIndex; // this case should never occur
         }
     }
 
@@ -317,7 +320,6 @@ public class MyHelper {
         boolean bottomToTop             = false;
         boolean lowerLeftToUpperRight   = false;
         boolean upperRightToLowerLeft   = false;
-        int spaceToNextCoin ? //TODO: GO ON HERE and underneath
 
         for(VirtualPotential virtualPotential:virtualPattern.getListOfPotentials())
         {
@@ -353,21 +355,35 @@ public class MyHelper {
                 switch (virtualPattern.getChainLength())
                 {
                     case 2:
-                        if(upperLeftToLowerRight && upperRightToLowerLeft)
-                            return PatternType.Diagonal_ullr_urll_2;
-                        if(upperLeftToLowerRight)
+                        if(upperLeftToLowerRight && lowerRightToUpperLeft)
+                            return PatternType.Diagonal_ullr_lrul_2;
+                        else if(upperRightToLowerLeft && lowerLeftToUpperRight)
+                            return PatternType.Diagonal_urll_llur_2;
+                        else if(upperLeftToLowerRight)
                             return PatternType.Diagonal_ullr_2;
-                        if(upperRightToLowerLeft)
+                        else if(upperRightToLowerLeft)
                             return PatternType.Diagonal_urll_2;
-                        break;
+                        else if(lowerLeftToUpperRight)
+                            return PatternType.Diagonal_llur_2;
+                        else if(lowerRightToUpperLeft)
+                            return PatternType.Diagonal_lrul_2;
+                        else
+                            return PatternType.Diagonal_2;
                     case 3:
-                        if(upperLeftToLowerRight && upperRightToLowerLeft)
-                            return PatternType.Diagonal_ullr_urll_3;
-                        if(upperLeftToLowerRight)
+                        if(upperLeftToLowerRight && lowerRightToUpperLeft)
+                            return PatternType.Diagonal_ullr_lrul_3;
+                        else if(upperRightToLowerLeft && lowerLeftToUpperRight)
+                            return PatternType.Diagonal_urll_llur_3;
+                        else if(upperLeftToLowerRight)
                             return PatternType.Diagonal_ullr_3;
-                        if(upperRightToLowerLeft)
+                        else if(upperRightToLowerLeft)
                             return PatternType.Diagonal_urll_3;
-                        break;
+                        else if(lowerLeftToUpperRight)
+                            return PatternType.Diagonal_llur_3;
+                        else if(lowerRightToUpperLeft)
+                            return PatternType.Diagonal_lrul_3;
+                        else
+                            return PatternType.Diagonal_3;
                 }
                 break;
             case Horizontal:
@@ -376,33 +392,45 @@ public class MyHelper {
                     case 2:
                         if(leftToRight && rightToLeft)
                             return PatternType.Horizontal_2_plr;
-                        if(leftToRight)
+                        else if(leftToRight)
                             return PatternType.Horizontal_2_pr;
-                        if(rightToLeft)
+                        else if(rightToLeft)
                             return PatternType.Horizontal_2_pl;
-                        break;
+                        else
+                            return PatternType.Horizontal_2;
                     case 3:
                         if(leftToRight && rightToLeft)
                             return PatternType.Horizontal_3_plr;
-                        if(leftToRight)
+                        else if(leftToRight)
                             return PatternType.Horizontal_3_pr;
-                        if(rightToLeft)
+                        else if(rightToLeft)
                             return PatternType.Horizontal_3_pl;
-                        break;
+                        else
+                            return PatternType.Horizontal_3;
                 }
                 break;
             case Vertical:
                 switch (virtualPattern.getChainLength())
                 {
                     case 2:
-                        break;
+                        if(bottomToTop)
+                            return PatternType.Vertical_2_pt;
+                        else
+                            return PatternType.Vertical_2;
                     case 3:
-                        break;
+                        if(bottomToTop)
+                            return PatternType.Vertical_3_pt;
+                        else
+                            return PatternType.Vertical_3;
                 }
                 break;
         }
+
+        return null; // this case should never occur
     }
 
     public static boolean checkCompleteability(VirtualPattern virtualPattern) {
+        //TODO: look through potentials of pattern and count coins possible to be set on potentials - if less than four, return false
+        return false;
     }
 }

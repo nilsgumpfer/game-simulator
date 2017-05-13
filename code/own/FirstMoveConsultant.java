@@ -48,10 +48,7 @@ public class FirstMoveConsultant extends AMoveConsultant
         }*/
         /******************************************************************************************************/
 
-        // if critical patterns/potentials found, block them (here: just first one) //TODO: make this smarter!
-        if(rivalPotential.size() > 0)
-            if(rivalPotential.get(0).getListOfGaps().size() > 0)
-                selectedColumn = rivalPotential.get(0).getListOfGaps().get(0).getHorizontalPosition() + 1;
+        
 
         return new Move(selectedColumn);
     }

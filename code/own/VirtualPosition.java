@@ -13,6 +13,7 @@ public class VirtualPosition {
     private boolean tmpIsPartOfDiagonalPattern      = false;
     private int potentialRating = -1;
     private boolean positionScanned = false;
+    private int totalPotentialScore = 0;
 
     public VirtualPosition(int horizontalPosition, int verticalPosition) {
         this.horizontalPosition = horizontalPosition;
@@ -96,5 +97,13 @@ public class VirtualPosition {
 
     public void setPositionScanned(boolean positionScanned) {
         this.positionScanned = positionScanned;
+    }
+
+    public void addPotentialScore(int potentialScore) {
+        totalPotentialScore += potentialScore;
+    }
+
+    public void resetPotentialScore(){
+        totalPotentialScore = 0;
     }
 }

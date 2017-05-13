@@ -31,6 +31,8 @@ public class VirtualPattern {
         potentialRating         = MyHelper.scorePotentialOfPattern(this);
         isCompletableToFour     = MyHelper.checkCompleteability(this);
 
+        PotentialManager.incorporatePotentials(listOfPotentials);
+
         System.out.println("Created new Pattern:" + this);
     }
 
