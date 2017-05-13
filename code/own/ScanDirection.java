@@ -5,5 +5,5 @@ package own;
  */
 public enum ScanDirection {
     UpperLeftToLowerRight,
-    UpperRightToLowerLeft
+    LeftToRight, TopToBottom, LowerRightToUpperLeft, RightToLeft, BottomToTop, LowerLeftToUpperRight, UpperRightToLowerLeft
 }

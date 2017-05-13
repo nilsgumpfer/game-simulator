@@ -3,7 +3,6 @@ package own;
 import basic.Move;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -123,71 +122,148 @@ public class MyHelper {
         return virtualPatternList;
     }
 
-
-    public static List<Integer> readGapsOfPattern(VirtualPattern virtualPattern)
+    // dispatcher for read of gaps: routes requests according to pattern type
+    public static List<VirtualPotential> scanPotentialsOfPattern(VirtualPattern virtualPattern)
     {
-        List<Integer> listOfGaps = new ArrayList<>();
+        List<VirtualPotential> virtualPotentialList = new ArrayList<>();
 
-        switch (virtualPattern.getPatternType())
-        {
-            case Vertical_2:
-                break;
-            case Vertical_2_pt:
-                listOfGaps.add(virtualPattern.getStartPosition().getHorizontalPosition()); // column index of pattern
-                break;
-            case Vertical_3:
-                break;
-            case Vertical_3_pt:
-                listOfGaps.add(virtualPattern.getStartPosition().getHorizontalPosition()); // column index of pattern
-                break;
-            case Horizontal_2:
-                break;
-            case Horizontal_2_pr:
-                listOfGaps.add(virtualPattern.getEndPosition().getHorizontalPosition()+1); // column index of gap
-                break;
-            case Horizontal_2_pl:
-                listOfGaps.add(virtualPattern.getStartPosition().getHorizontalPosition()-1); // column index of gap
-                break;
-            case Horizontal_3:
-                break;
-            case Horizontal_3_pr:
-                listOfGaps.add(virtualPattern.getEndPosition().getHorizontalPosition()+1); // column index of gap
-                break;
-            case Horizontal_3_pl:
-                listOfGaps.add(virtualPattern.getStartPosition().getHorizontalPosition()-1); // column index of gap
-                break;
-            case Horizontal_3_plr:
-                listOfGaps.add(virtualPattern.getEndPosition().getHorizontalPosition()+1); // column index of gap
-                listOfGaps.add(virtualPattern.getStartPosition().getHorizontalPosition()-1); // column index of gap
-                break;
-            case Diagonal_2_hr:
-                break;
-            case Diagonal_2_hl:
-                break;
-            case Diagonal_3_hr:
-                break;
-            case Diagonal_3_hl:
-                break;
-            case Horizontal_2_plr:
-                listOfGaps.add(virtualPattern.getEndPosition().getHorizontalPosition()+1); // column index of gap
-                listOfGaps.add(virtualPattern.getStartPosition().getHorizontalPosition()-1); // column index of gap
-                break;
-            case Horizontal_2_plr_d:
-                listOfGaps.add(virtualPattern.getEndPosition().getHorizontalPosition()+1); // column index of gap
-                listOfGaps.add(virtualPattern.getStartPosition().getHorizontalPosition()-1); // column index of gap
-                break;
-            case Horizontal_2_pl_d:
-                listOfGaps.add(virtualPattern.getStartPosition().getHorizontalPosition()-1); // column index of gap
-                break;
-            case Horizontal_2_pr_d:
-                listOfGaps.add(virtualPattern.getEndPosition().getHorizontalPosition()+1); // column index of gap
-                break;
-        }
+        // scan former scan-direction for pattern-recognition to read potentials
+        virtualPotentialList.addAll(followDirectionAndScanPotentials(virtualPattern.getStartPosition(), virtualPattern.getVirtualGameBoard(), virtualPattern.getScanDirection()));
 
-        return listOfGaps;
+        // scan also opposite of former scan-direction for pattern-recognition to read potentials
+        virtualPotentialList.addAll(followDirectionAndScanPotentials(virtualPattern.getStartPosition(), virtualPattern.getVirtualGameBoard(), getOppositeDirection(virtualPattern.getScanDirection())));
+
+        return virtualPotentialList;
     }
 
-    public static List<VirtualPosition> getStartPositionsForDirection(VirtualGameBoard virtualGameBoard, ScanDirection scanDirection)
+    private static List<VirtualPotential> followDirectionAndScanPotentials(VirtualPosition startPosition, VirtualGameBoard virtualGameBoard, ScanDirection scanDirection) {
+        List<VirtualPotential> virtualPotentialList = new ArrayList<>();
+
+        VirtualPosition[][] arrayOfPositions = virtualGameBoard.getArrayOfPositions();
+
+        int sizeHorizontal  = virtualGameBoard.getListOfColumns().size();
+        int sizeVertical    = virtualGameBoard.getListOfRows().size();
+        int iV              = startPosition.getVerticalPosition();
+        int iH              = startPosition.getHorizontalPosition();
+
+        iV = nextVerticalIndex(iV,scanDirection);
+        iH = nextHorizontalIndex(iH,scanDirection);
+
+        VirtualPosition currentPosition = arrayOfPositions[iH][iV];
+
+        while(MyHelper.checkPositionStillInBounds(iH,iV,sizeHorizontal-1, sizeVertical-1))
+        {
+            if(currentPosition.getPlayerColor() == PlayerColor.Empty)
+                virtualPotentialList.add(new VirtualPotential(scanDirection,currentPosition,getGapDepthUnderneathPosition(virtualGameBoard,currentPosition)));
+            else
+                break;
+
+            iV = nextVerticalIndex(iV,scanDirection);
+            iH = nextHorizontalIndex(iH,scanDirection);
+        }
+
+        return virtualPotentialList;
+    }
+
+    private static int getGapDepthUnderneathPosition(VirtualGameBoard virtualGameBoard, VirtualPosition startPosition)
+    {
+        VirtualPosition[][] arrayOfPositions = virtualGameBoard.getArrayOfPositions();
+
+        int depthCounter    = 0;
+        int sizeHorizontal  = virtualGameBoard.getListOfColumns().size();
+        int sizeVertical    = virtualGameBoard.getListOfRows().size();
+        int iV              = startPosition.getVerticalPosition() + 1; // one position underneath
+        int iH              = startPosition.getHorizontalPosition();
+
+        VirtualPosition currentPosition = arrayOfPositions[iH][iV];
+
+        while(MyHelper.checkPositionStillInBounds(iH,iV,sizeHorizontal-1, sizeVertical-1))
+        {
+            if(currentPosition.getPlayerColor() == PlayerColor.Empty)
+                depthCounter++;
+            else
+                break;
+
+            iV++; // go deeper
+        }
+
+        return depthCounter;
+    }
+
+    private static int nextVerticalIndex(int currentIndex, ScanDirection scanDirection)
+    {
+        switch (scanDirection)
+        {
+            case UpperLeftToLowerRight:
+                return ++currentIndex;
+            case LeftToRight:
+                return ++currentIndex;
+            case TopToBottom:
+                return ++currentIndex;
+            case LowerRightToUpperLeft:
+                return --currentIndex;
+            case RightToLeft:
+                return --currentIndex;
+            case BottomToTop:
+                return --currentIndex;
+            case LowerLeftToUpperRight:
+                return --currentIndex;
+            case UpperRightToLowerLeft:
+                return ++currentIndex;
+            default:
+                return currentIndex; // this case should never happen
+        }
+    }
+
+    private static int nextHorizontalIndex(int currentIndex, ScanDirection scanDirection)
+    {
+        switch (scanDirection)
+        {
+            case UpperLeftToLowerRight:
+                return ++currentIndex;
+            case LeftToRight:
+                return ++currentIndex;
+            case TopToBottom:
+                return ++currentIndex;
+            case LowerRightToUpperLeft:
+                return --currentIndex;
+            case RightToLeft:
+                return --currentIndex;
+            case BottomToTop:
+                return --currentIndex;
+            case LowerLeftToUpperRight:
+                return --currentIndex;
+            case UpperRightToLowerLeft:
+                return ++currentIndex;
+            default:
+                return currentIndex; // this case should never happen
+        }
+    }
+
+    private static ScanDirection getOppositeDirection(ScanDirection scanDirection){
+        switch (scanDirection) {
+            case UpperLeftToLowerRight:
+                return ScanDirection.LowerRightToUpperLeft;
+            case LeftToRight:
+                return ScanDirection.RightToLeft;
+            case TopToBottom:
+                return ScanDirection.BottomToTop;
+            case LowerRightToUpperLeft:
+                return ScanDirection.UpperLeftToLowerRight;
+            case RightToLeft:
+                return ScanDirection.LeftToRight;
+            case BottomToTop:
+                return ScanDirection.TopToBottom;
+            case LowerLeftToUpperRight:
+                return ScanDirection.UpperRightToLowerLeft;
+            case UpperRightToLowerLeft:
+                return ScanDirection.LowerLeftToUpperRight;
+            default:
+                return scanDirection; // in case no opposite defined, return original direction
+        }
+    }
+
+    public static List<VirtualPosition> defineStartPositionsForScanDirection(VirtualGameBoard virtualGameBoard, ScanDirection scanDirection)
     {
         List<VirtualPosition> listOfStartPositions = new ArrayList<>();
         List<List<VirtualPosition>> listOfRows = virtualGameBoard.getListOfRows();
@@ -220,7 +296,7 @@ public class MyHelper {
         return listOfStartPositions;
     }
 
-    public static boolean checkPosition(int iCurrentH, int iCurrentV, int iMaxH, int iMaxV){
+    public static boolean checkPositionStillInBounds(int iCurrentH, int iCurrentV, int iMaxH, int iMaxV){
         return iCurrentH >= 0 && iCurrentH <= iMaxH && iCurrentV >= 0 && iCurrentV <= iMaxV;
     }
 
@@ -230,5 +306,103 @@ public class MyHelper {
                 virtualPosition.flushPatternFlags();
             }
         }
+    }
+
+    public static PatternType redefinePatternType(VirtualPattern virtualPattern) {
+
+        boolean upperLeftToLowerRight   = false;
+        boolean leftToRight             = false;
+        boolean lowerRightToUpperLeft   = false;
+        boolean rightToLeft             = false;
+        boolean bottomToTop             = false;
+        boolean lowerLeftToUpperRight   = false;
+        boolean upperRightToLowerLeft   = false;
+        int spaceToNextCoin ? //TODO: GO ON HERE and underneath
+
+        for(VirtualPotential virtualPotential:virtualPattern.getListOfPotentials())
+        {
+            switch (virtualPotential.getScanDirection())
+            {
+                case UpperLeftToLowerRight:
+                    upperLeftToLowerRight   = true;
+                    break;
+                case LeftToRight:
+                    leftToRight             = true;
+                    break;
+                case LowerRightToUpperLeft:
+                    lowerRightToUpperLeft   = true;
+                    break;
+                case RightToLeft:
+                    rightToLeft             = true;
+                    break;
+                case BottomToTop:
+                    bottomToTop             = true;
+                    break;
+                case LowerLeftToUpperRight:
+                    lowerLeftToUpperRight   = true;
+                    break;
+                case UpperRightToLowerLeft:
+                    upperRightToLowerLeft   = true;
+                    break;
+            }
+        }
+
+        switch (virtualPattern.getPatternType())
+        {
+            case Diagonal:
+                switch (virtualPattern.getChainLength())
+                {
+                    case 2:
+                        if(upperLeftToLowerRight && upperRightToLowerLeft)
+                            return PatternType.Diagonal_ullr_urll_2;
+                        if(upperLeftToLowerRight)
+                            return PatternType.Diagonal_ullr_2;
+                        if(upperRightToLowerLeft)
+                            return PatternType.Diagonal_urll_2;
+                        break;
+                    case 3:
+                        if(upperLeftToLowerRight && upperRightToLowerLeft)
+                            return PatternType.Diagonal_ullr_urll_3;
+                        if(upperLeftToLowerRight)
+                            return PatternType.Diagonal_ullr_3;
+                        if(upperRightToLowerLeft)
+                            return PatternType.Diagonal_urll_3;
+                        break;
+                }
+                break;
+            case Horizontal:
+                switch (virtualPattern.getChainLength())
+                {
+                    case 2:
+                        if(leftToRight && rightToLeft)
+                            return PatternType.Horizontal_2_plr;
+                        if(leftToRight)
+                            return PatternType.Horizontal_2_pr;
+                        if(rightToLeft)
+                            return PatternType.Horizontal_2_pl;
+                        break;
+                    case 3:
+                        if(leftToRight && rightToLeft)
+                            return PatternType.Horizontal_3_plr;
+                        if(leftToRight)
+                            return PatternType.Horizontal_3_pr;
+                        if(rightToLeft)
+                            return PatternType.Horizontal_3_pl;
+                        break;
+                }
+                break;
+            case Vertical:
+                switch (virtualPattern.getChainLength())
+                {
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                }
+                break;
+        }
+    }
+
+    public static boolean checkCompleteability(VirtualPattern virtualPattern) {
     }
 }

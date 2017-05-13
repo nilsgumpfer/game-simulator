@@ -23,7 +23,7 @@ public enum PatternType {
     Horizontal_2_plr_d,
     Horizontal_2_pl_d,
     Horizontal_2_pr_d,
-    Diagonal_2, Diagonal_3, Diagonal_UNKNOWN, Diagonal_ullr_2, Diagonal_urll_2, Diagonal_urll_3, Diagonal_ullr_3, Diagonal_3_hl       //three coins, heading to upper left corner
+    Diagonal_2, Diagonal_3, Diagonal_UNKNOWN, Diagonal_ullr_2, Diagonal_urll_2, Diagonal_urll_3, Diagonal_ullr_3, Vertical, Horizontal, Diagonal, Diagonal_ullr_urll_2, Diagonal_ullr_urll_3, Diagonal_3_hl       //three coins, heading to upper left corner
 
     //potential can be calculated considering depth of "canyon"/mandatory number of moves to reach diagonal
 }

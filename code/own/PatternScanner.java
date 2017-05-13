@@ -1,7 +1,5 @@
 package own;
 
-import com.sun.org.apache.xerces.internal.impl.xs.SchemaNamespaceSupport;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -154,26 +152,8 @@ public class PatternScanner {
                         // go on only if pattern was found
                         if(chainLength > 1)
                         {
-                            PatternType patternType = null;
-
-                            // define pattern-type using chain-length and if potential is present
-                            switch (chainLength)
-                            {
-                                case 2:
-                                    if(hasPotential)
-                                        patternType = PatternType.Vertical_2_pt;
-                                    else
-                                        patternType = PatternType.Vertical_2;
-                                    break;
-                                case 3:
-                                    if(hasPotential)
-                                        patternType = PatternType.Vertical_3_pt;
-                                    else
-                                        patternType = PatternType.Vertical_3;
-                                    break;
-                            }
-
-                            listOfVirtualPatterns.add(new VirtualPattern(patternStartPosition, patternEndPosition, patternType, playerColor));
+                            // generate new pattern-object and save it
+                            listOfVirtualPatterns.add(new VirtualPattern(PatternType.Diagonal, patternStartPosition, patternEndPosition, virtualGameBoard, chainLength, playerColor, ScanDirection.TopToBottom));
                         }
                     }
                 }
@@ -256,11 +236,8 @@ public class PatternScanner {
                         // go on only if pattern was found
                         if(chainLength > 1)
                         {
-                            // define pattern-type using chain-length and if potential is present
-                            PatternType patternType = checkHorizontalPotential(virtualGameBoard, patternStartPosition, patternEndPosition, chainLength);
-
                             // generate new pattern-object and save it
-                            listOfVirtualPatterns.add(new VirtualPattern(patternStartPosition, patternEndPosition, patternType, playerColor));
+                            listOfVirtualPatterns.add(new VirtualPattern(PatternType.Diagonal, patternStartPosition, patternEndPosition, virtualGameBoard, chainLength, playerColor, ScanDirection.LeftToRight));
                         }
                     }
                 }
@@ -275,7 +252,7 @@ public class PatternScanner {
 
     private static List<VirtualPattern> scanForDiagonalPatternsForColorForDirection(VirtualGameBoard virtualGameBoard, PlayerColor playerColor, boolean onlyPotentials, ScanDirection scanDirection)
     {
-        List<VirtualPosition> listOfStartPositions = MyHelper.getStartPositionsForDirection(virtualGameBoard, scanDirection);
+        List<VirtualPosition> listOfStartPositions = MyHelper.defineStartPositionsForScanDirection(virtualGameBoard, scanDirection);
         List<VirtualPattern> listOfVirtualPatterns = new ArrayList<>();
         VirtualPosition[][] arrayOfPositions = virtualGameBoard.getArrayOfPositions();
 
@@ -288,7 +265,7 @@ public class PatternScanner {
             int iH = currentStartPosition.getHorizontalPosition();
 
             // as long as position is not out of bounds, look for chains of equal colors heading from corner to corner or parallel
-            while(MyHelper.checkPosition(iH,iV,sizeHorizontal-1, sizeVertical-1))
+            while(MyHelper.checkPositionStillInBounds(iH,iV,sizeHorizontal-1, sizeVertical-1))
             {
                 // get position by using indexes
                 VirtualPosition currentPosition = arrayOfPositions[iH][iV];
@@ -326,7 +303,7 @@ public class PatternScanner {
                                 iHGap = iH - gap;
 
                             // check if you´re already at the edge of your row
-                            if (MyHelper.checkPosition(iHGap,iVGap,sizeHorizontal-1, sizeVertical-1))
+                            if (MyHelper.checkPositionStillInBounds(iHGap,iVGap,sizeHorizontal-1, sizeVertical-1))
                             {
                                 tmpNextPosition = arrayOfPositions[iHGap][iVGap];
 
@@ -368,11 +345,8 @@ public class PatternScanner {
                         // go on only if pattern was found
                         if(chainLength > 1)
                         {
-                            // define pattern-type using chain-length and if potential is present
-                            PatternType patternType = checkDiagonalPotential(virtualGameBoard, scanDirection, patternStartPosition, patternEndPosition, chainLength);
-
                             // generate new pattern-object and save it
-                            listOfVirtualPatterns.add(new VirtualPattern(patternStartPosition, patternEndPosition, patternType, playerColor));
+                            listOfVirtualPatterns.add(new VirtualPattern(PatternType.Diagonal, patternStartPosition, patternEndPosition, virtualGameBoard, chainLength, playerColor, scanDirection));
                         }
                     }
                 }
