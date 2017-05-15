@@ -1,5 +1,7 @@
 package own;
 
+import basic.Move;
+
 /**
  * Created by Nils on 30.04.2017.
  */
@@ -100,5 +102,10 @@ public class VirtualPosition {
 
     public void resetPotentialScore(){
         totalPotentialScore = 0;
+    }
+
+    public Move generateMoveForThisPosition()
+    {
+        return new Move(horizontalPosition + 1);
     }
 }

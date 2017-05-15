@@ -48,11 +48,11 @@ public class FirstMoveConsultant extends AMoveConsultant
         }*/
         /******************************************************************************************************/
 
+        PotentialManager.filterOutPotentialsWithGapGreaterThan(0);
 
-        if(PotentialManager.getDirectPotentialsWithNoGap().size() > 0) {
-            // advisory activity: potential without gap underneath and no gap to pattern
-            finalMove = PotentialManager.getDirectPotentialsWithNoGap().get(0).generateMoveForThisPotential();
-        }
+        VirtualPosition position = PotentialManager.getHighestPotential(virtualGameBoard);
+        if(position != null)
+            finalMove = position.generateMoveForThisPosition();
 
         virtualGameBoard.printScores();
 

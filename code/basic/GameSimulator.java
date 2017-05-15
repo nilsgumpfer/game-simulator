@@ -1,5 +1,7 @@
 package basic;
 
+import sun.plugin2.message.ShowStatusMessage;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
@@ -63,6 +65,7 @@ public class GameSimulator {
 			game.setGui(gui);
 			Player winner = game.play(players);
 			System.out.println("Winner:" + winner);
+			
 			if (winner != null) {
 				scores.put(winner, scores.get(winner) + 1);
 			}

@@ -49,11 +49,6 @@ public class VirtualPotential {
         return virtualPattern;
     }
 
-    public Move generateMoveForThisPotential()
-    {
-        return new Move(virtualPosition.getHorizontalPosition() + 1);
-    }
-
     @Override
     public String toString(){
         return  "(" + virtualPosition.getHorizontalPosition() + "|" + virtualPosition.getVerticalPosition() + ")" +

@@ -152,7 +152,7 @@ public class MyHelper {
         int chainLength     = virtualPattern.getChainLength();
         int maxDistance     = 4 - chainLength; // distance to completeness of pattern (max. 4)
         int distance        = 1; // first item is one coin away
-        int potential       = 3; // potential decreases with growing distance from pattern
+        int potential       = chainLength; // potential decreases with growing distance from pattern and according to "worth" of pattern (based on chain-length)
         int tmpPotential;
 
         iV = nextVerticalIndex(iV,scanDirection);
@@ -179,7 +179,7 @@ public class MyHelper {
                                         virtualGameBoard, currentPosition
                                 ),
                                 distance,
-                                potential
+                                tmpPotential
                         )
                 );
                 distance++;
@@ -328,6 +328,7 @@ public class MyHelper {
     }
 
     public static boolean checkPositionStillInBounds(int iCurrentH, int iCurrentV, int iMaxH, int iMaxV){
+        //TODO: test edges!
         return iCurrentH >= 0 && iCurrentH <= iMaxH && iCurrentV >= 0 && iCurrentV <= iMaxV;
     }
 
