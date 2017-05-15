@@ -33,7 +33,7 @@ public class VirtualPattern {
 
         PotentialManager.incorporatePotentials(listOfPotentials);
 
-        System.out.println("Created new Pattern:" + this);
+        System.out.println("new Pattern:" + this);
     }
 
     public VirtualPosition getStartPosition() {
@@ -80,6 +80,6 @@ public class VirtualPattern {
     public String toString(){
         return  "(" + startPosition.getHorizontalPosition() + "|" + startPosition.getVerticalPosition() + ")" +
                 "(" + endPosition.getHorizontalPosition() + "|" + endPosition.getVerticalPosition() + ")" +
-                " Pattern: " + patternType + " Color: " + playerColor + " Potential: " + potentialRating;
+                patternType + " " + playerColor + " " + scanDirection + " " + isCompletableToFour;
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class PotentialManager {
     private static PotentialManager ourInstance = new PotentialManager();
-    private List<VirtualPotential> virtualPotentialList = new ArrayList<>();
+    private static List<VirtualPotential> virtualPotentialList = new ArrayList<>();
 
     private PotentialManager() {
     }
@@ -29,17 +29,35 @@ public class PotentialManager {
             incorporatePotential(virtualPotential);
     }
 
-    public List<VirtualPotential> getVirtualPotentialList() {
-        return virtualPotentialList;
+    public static List<VirtualPotential> getVirtualPotentialList() {
+        return PotentialManager.getInstance().virtualPotentialList;
     }
 
-    public VirtualPotential getHighestPotential(VirtualGameBoard virtualGameBoard)
+    public static VirtualPotential getHighestPotential(VirtualGameBoard virtualGameBoard)
     {
         //TODO: run through virtual board and save highest scored position
         return null;
     }
 
-    public void resetAllPotentialScores(VirtualGameBoard virtualGameBoard){
+    public static void resetAllPotentialScores(VirtualGameBoard virtualGameBoard){
         //TODO: run through virtual board and reset all virtual positions regarding their score
+    }
+
+    public static List<VirtualPotential> getDirectPotentialsWithNoGap(){
+        List<VirtualPotential> virtualPotentialList = new ArrayList<>();
+
+        // filter only potentials which are directly positioned next to a pattern (no gaps!)
+        // filter only potentials which have no gap underneath (so they are short-term-relevant)
+        for(VirtualPotential virtualPotential : PotentialManager.getInstance().virtualPotentialList){
+            if(virtualPotential.getDistanceFromPattern() == 1 && virtualPotential.getGapDepthUnderneathPosition() == 0)
+                virtualPotentialList.add(virtualPotential);
+        }
+
+        return virtualPotentialList;
+    }
+
+    public static void reset(VirtualGameBoard virtualGameBoard) {
+        resetAllPotentialScores(virtualGameBoard);
+        virtualPotentialList.clear();
     }
 }

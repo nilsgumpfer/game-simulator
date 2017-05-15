@@ -147,6 +147,46 @@ public class VirtualGameBoard {
         return plainPortrayalOfBoard;
     }
 
+    public void printScores(){
+        String plainPortrayalOfBoard = "";
+        int v = 0;
+        int score = 0;
+
+        plainPortrayalOfBoard += '\n';
+        plainPortrayalOfBoard += '\n';
+        plainPortrayalOfBoard += "VIRTUAL GAMEBOARD";
+        plainPortrayalOfBoard += '\n';
+
+        plainPortrayalOfBoard += "\\";
+
+        for(int h=0 ;h < horizontalSize; h++)
+            plainPortrayalOfBoard += "|" + h;
+
+        plainPortrayalOfBoard += "|";
+        plainPortrayalOfBoard += '\n';
+
+        for (List<VirtualPosition> currentRow:listOfRows) {
+
+            plainPortrayalOfBoard += v;
+
+            for (VirtualPosition currentPosition:currentRow) {
+                score = currentPosition.getTotalPotentialScore();
+
+                if(score != 0)
+                    plainPortrayalOfBoard += "|" + score;
+                else
+                    plainPortrayalOfBoard += "|" + " ";
+            }
+
+            plainPortrayalOfBoard += "|";
+            plainPortrayalOfBoard += '\n';
+
+            v++;
+        }
+
+        System.out.println(plainPortrayalOfBoard);
+    }
+
     public List<List<VirtualPosition>> getListOfColumns() {
         return listOfColumns;
     }

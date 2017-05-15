@@ -6,14 +6,13 @@ package own;
 public class VirtualPosition {
     private int horizontalPosition;
     private int verticalPosition;
-    private PlayerColor playerColor = PlayerColor.Empty; //initial state: empty
-    private int moveIndex = -1; //initial value: invalid
+    private PlayerColor playerColor                 = PlayerColor.Empty; //initial state: empty
+    private int moveIndex                           = -1; //initial value: invalid
     private boolean tmpIsPartOfVerticalPattern      = false;
     private boolean tmpIsPartOfHorizontalPattern    = false;
     private boolean tmpIsPartOfDiagonalPattern      = false;
-    private int potentialRating = -1;
-    private boolean positionScanned = false;
-    private int totalPotentialScore = 0;
+    private boolean positionScanned                 = false;
+    private int totalPotentialScore                 = 0;
 
     public VirtualPosition(int horizontalPosition, int verticalPosition) {
         this.horizontalPosition = horizontalPosition;
@@ -83,14 +82,6 @@ public class VirtualPosition {
         this.tmpIsPartOfDiagonalPattern = tmpIsPartOfDiagonalPattern;
     }
 
-    public int getPotentialRating() {
-        return potentialRating;
-    }
-
-    public void setPotentialRating(int potentialRating) {
-        this.potentialRating = potentialRating;
-    }
-
     public boolean isPositionScanned() {
         return positionScanned;
     }
@@ -101,6 +92,10 @@ public class VirtualPosition {
 
     public void addPotentialScore(int potentialScore) {
         totalPotentialScore += potentialScore;
+    }
+
+    public int getTotalPotentialScore() {
+        return totalPotentialScore;
     }
 
     public void resetPotentialScore(){

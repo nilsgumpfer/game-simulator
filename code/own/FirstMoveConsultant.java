@@ -26,7 +26,7 @@ public class FirstMoveConsultant extends AMoveConsultant
         // consider blocking rival potentials only if critical (=3), block just at last moment, grow own potential from first point
 
         List<Integer> listOfPossibleColumns = MyHelper.extractPossibleColumnNumbers(possibleMoves);
-        int selectedColumn = listOfPossibleColumns.get(0);
+        Move finalMove = new Move(listOfPossibleColumns.get(listOfPossibleColumns.size()/2));
 
         // scan for all potentials of rival, planning to block them
         List<VirtualPattern> rivalPotential = scanHighPotentialPatterns(virtualGameBoard, PlayerColor.Rival);
@@ -49,8 +49,17 @@ public class FirstMoveConsultant extends AMoveConsultant
         /******************************************************************************************************/
 
 
+        if(PotentialManager.getDirectPotentialsWithNoGap().size() > 0) {
+            // advisory activity: potential without gap underneath and no gap to pattern
+            finalMove = PotentialManager.getDirectPotentialsWithNoGap().get(0).generateMoveForThisPotential();
+        }
 
-        return new Move(selectedColumn);
+        virtualGameBoard.printScores();
+
+        // cleanup to be ready for following requests in future
+        PotentialManager.reset(virtualGameBoard);
+
+        return finalMove;
     }
 
     private List<VirtualPattern> scanHighPotentialPatterns(VirtualGameBoard virtualGameBoard, PlayerColor playerColor){

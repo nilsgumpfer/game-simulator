@@ -131,34 +131,60 @@ public class MyHelper {
         List<VirtualPotential> virtualPotentialList = new ArrayList<>();
 
         // scan former scan-direction for pattern-recognition to read potentials
-        virtualPotentialList.addAll(followDirectionAndScanPotentials(virtualPattern.getStartPosition(), virtualPattern.getVirtualGameBoard(), virtualPattern.getScanDirection()));
+        virtualPotentialList.addAll(followDirectionAndScanPotentials(virtualPattern, virtualPattern.getStartPosition(), virtualPattern.getVirtualGameBoard(), virtualPattern.getScanDirection()));
 
         // scan also opposite of former scan-direction for pattern-recognition to read potentials
-        virtualPotentialList.addAll(followDirectionAndScanPotentials(virtualPattern.getStartPosition(), virtualPattern.getVirtualGameBoard(), getOppositeDirection(virtualPattern.getScanDirection())));
+        virtualPotentialList.addAll(followDirectionAndScanPotentials(virtualPattern, virtualPattern.getStartPosition(), virtualPattern.getVirtualGameBoard(), getOppositeDirection(virtualPattern.getScanDirection())));
 
         return virtualPotentialList;
     }
 
-    private static List<VirtualPotential> followDirectionAndScanPotentials(VirtualPosition startPosition, VirtualGameBoard virtualGameBoard, ScanDirection scanDirection) {
+    private static List<VirtualPotential> followDirectionAndScanPotentials(VirtualPattern virtualPattern, VirtualPosition startPosition, VirtualGameBoard virtualGameBoard, ScanDirection scanDirection) {
         List<VirtualPotential> virtualPotentialList = new ArrayList<>();
 
         VirtualPosition[][] arrayOfPositions = virtualGameBoard.getArrayOfPositions();
-        VirtualPosition currentPosition = startPosition;
+        VirtualPosition currentPosition;
 
         int sizeHorizontal  = virtualGameBoard.getListOfColumns().size();
         int sizeVertical    = virtualGameBoard.getListOfRows().size();
         int iV              = startPosition.getVerticalPosition();
         int iH              = startPosition.getHorizontalPosition();
+        int chainLength     = virtualPattern.getChainLength();
+        int maxDistance     = 4 - chainLength; // distance to completeness of pattern (max. 4)
+        int distance        = 1; // first item is one coin away
+        int potential       = 3; // potential decreases with growing distance from pattern
+        int tmpPotential;
 
         iV = nextVerticalIndex(iV,scanDirection);
         iH = nextHorizontalIndex(iH,scanDirection);
 
-        while(MyHelper.checkPositionStillInBounds(iH,iV,sizeHorizontal-1, sizeVertical-1))
+        // stay in bounds go straight and look for potentials, but stop if realistic potential is exhausted or distance is longer than necessary
+        while(MyHelper.checkPositionStillInBounds(iH,iV,sizeHorizontal-1, sizeVertical-1) /*&& potential > 0 && distance <= maxDistance*/)
         {
             currentPosition = arrayOfPositions[iH][iV];
 
-            if(currentPosition.getPlayerColor() == PlayerColor.Empty)
-                virtualPotentialList.add(new VirtualPotential(scanDirection,currentPosition,getGapDepthUnderneathPosition(virtualGameBoard,currentPosition)));
+            if(currentPosition.getPlayerColor() == PlayerColor.Empty) {
+                // in case only one coin left to complete
+                if(chainLength == 3 && potential == 3)
+                    tmpPotential = 10; // set some arbitrary high value, e.g. mass of sun, etc.
+                else
+                    tmpPotential = potential;
+
+                virtualPotentialList.add(
+                        new VirtualPotential(
+                                virtualPattern,
+                                scanDirection,
+                                currentPosition,
+                                getGapDepthUnderneathPosition(
+                                        virtualGameBoard, currentPosition
+                                ),
+                                distance,
+                                potential
+                        )
+                );
+                distance++;
+                potential--;
+            }
             else if(currentPosition.getPlayerColor() != startPosition.getPlayerColor())
                 break;
 
@@ -323,6 +349,7 @@ public class MyHelper {
         boolean lowerLeftToUpperRight   = false;
         boolean upperRightToLowerLeft   = false;
 
+        // read, which kinds of potentials are present for this pattern
         for(VirtualPotential virtualPotential:virtualPattern.getListOfPotentials())
         {
             switch (virtualPotential.getScanDirection())
@@ -351,6 +378,7 @@ public class MyHelper {
             }
         }
 
+        // assign type according to direction, chain-length and potential directions
         switch (virtualPattern.getPatternType())
         {
             case Diagonal:
