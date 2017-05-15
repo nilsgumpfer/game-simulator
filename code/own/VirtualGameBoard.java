@@ -174,6 +174,10 @@ public class VirtualGameBoard {
 
                 if(score != 0)
                     plainPortrayalOfBoard += "|" + score;
+                else if(currentPosition.getPlayerColor() == PlayerColor.Rival)
+                    plainPortrayalOfBoard += "|" + "R";
+                else if(currentPosition.getPlayerColor() == PlayerColor.Own)
+                    plainPortrayalOfBoard += "|" + "O";
                 else
                     plainPortrayalOfBoard += "|" + " ";
             }

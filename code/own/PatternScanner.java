@@ -66,8 +66,8 @@ public class PatternScanner {
     private static List<VirtualPattern> scanForDiagonalPatternsForColor(VirtualGameBoard virtualGameBoard, PlayerColor playerColor, boolean onlyPotentials) {
         List<VirtualPattern> listOfVirtualPatterns = new ArrayList<>();
 
-        listOfVirtualPatterns.addAll(scanForDiagonalPatternsForColorForDirection(virtualGameBoard,playerColor, onlyPotentials, ScanDirection.UpperLeftToLowerRight));
-        listOfVirtualPatterns.addAll(scanForDiagonalPatternsForColorForDirection(virtualGameBoard,playerColor, onlyPotentials, ScanDirection.UpperRightToLowerLeft));
+        listOfVirtualPatterns.addAll(scanForDiagonalPatternsForColorForDirection(virtualGameBoard, playerColor, onlyPotentials, ScanDirection.UpperLeftToLowerRight));
+        listOfVirtualPatterns.addAll(scanForDiagonalPatternsForColorForDirection(virtualGameBoard, playerColor, onlyPotentials, ScanDirection.UpperRightToLowerLeft));
 
         return  listOfVirtualPatterns;
     }

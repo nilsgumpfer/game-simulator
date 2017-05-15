@@ -21,6 +21,7 @@ public class TestMyStuff {
         moveList.add(new Move(5));
         moveList.add(new Move(6));
         moveList.add(new Move(7));
+
         /*
         moveConsultant.incorporateOwnMove(new Move(2));
         moveConsultant.incorporateOwnMove(new Move(3));
@@ -33,6 +34,7 @@ public class TestMyStuff {
         moveConsultant.incorporateOwnMove(new Move(4));
         */
 
+        /*
         moveConsultant.incorporateRivalMove(new Move(1));
         moveConsultant.incorporateRivalMove(new Move(1));
         moveConsultant.incorporateOwnMove(new Move(1));
@@ -52,6 +54,20 @@ public class TestMyStuff {
         moveConsultant.incorporateRivalMove(new Move(5));
         moveConsultant.incorporateOwnMove(new Move(5));
         moveConsultant.incorporateRivalMove(new Move(5));
+        */
+
+        moveConsultant.incorporateOwnMove(new Move(1));
+
+        moveConsultant.incorporateRivalMove(new Move(2));
+        moveConsultant.incorporateOwnMove(new Move(2));
+
+        moveConsultant.incorporateRivalMove(new Move(3));
+        moveConsultant.incorporateRivalMove(new Move(3));
+        moveConsultant.incorporateOwnMove(new Move(3));
+
+        moveConsultant.incorporateRivalMove(new Move(4));
+        moveConsultant.incorporateRivalMove(new Move(4));
+        moveConsultant.incorporateRivalMove(new Move(4));
 
 
         moveConsultant.getBestPossibleMove(moveList);

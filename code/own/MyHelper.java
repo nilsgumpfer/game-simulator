@@ -159,7 +159,7 @@ public class MyHelper {
         iH = nextHorizontalIndex(iH,scanDirection);
 
         // stay in bounds go straight and look for potentials, but stop if realistic potential is exhausted or distance is longer than necessary
-        while(MyHelper.checkPositionStillInBounds(iH,iV,sizeHorizontal-1, sizeVertical-1) /*&& potential > 0 && distance <= maxDistance*/)
+        while(MyHelper.checkPositionStillInBounds(iH,iV,sizeHorizontal-1, sizeVertical-1) && potential > 0 && distance <= maxDistance)
         {
             currentPosition = arrayOfPositions[iH][iV];
 
@@ -263,9 +263,9 @@ public class MyHelper {
             case BottomToTop:
                 return currentIndex;
             case LowerLeftToUpperRight:
-                return --currentIndex;
-            case UpperRightToLowerLeft:
                 return ++currentIndex;
+            case UpperRightToLowerLeft:
+                return --currentIndex;
             default:
                 return currentIndex; // this case should never occur
         }
