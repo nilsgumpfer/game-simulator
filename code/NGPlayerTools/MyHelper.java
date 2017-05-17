@@ -169,8 +169,13 @@ public class MyHelper {
 
             if(currentPosition.getPlayerColor() == PlayerColor.Empty) {
                 // in case only one coin left to complete
-                if(chainLength == 3 && potential == 3)
-                    tmpPotential = 100; // set some arbitrary high value, e.g. mass of sun, etc.
+                if(chainLength == 3 && potential == 3) {
+                    // if it´s regarding YOUR pattern, force win, else force block
+                    if(virtualPattern.getPlayerColor() == PlayerColor.Own)
+                        tmpPotential = 200; // set some arbitrary high value, e.g. mass of sun, etc.
+                    else
+                        tmpPotential = 100; // set some arbitrary high value, e.g. mass of moon, etc.
+                }
                 else
                     tmpPotential = potential;
 
