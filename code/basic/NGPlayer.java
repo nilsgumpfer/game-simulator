@@ -1,7 +1,7 @@
 package basic;
 
-import own.FirstMoveConsultant;
-import own.AMoveConsultant;
+import NGPlayerTools.FirstMoveConsultant;
+import NGPlayerTools.AMoveConsultant;
 
 import java.util.List;
 

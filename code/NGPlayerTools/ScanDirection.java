@@ -1,4 +1,4 @@
-package own;
+package NGPlayerTools;
 
 /**
  * Created by Nils on 10.05.2017.

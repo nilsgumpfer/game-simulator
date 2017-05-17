@@ -1,8 +1,7 @@
-package own;
+package NGPlayerTools;
 
 import basic.Move;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 

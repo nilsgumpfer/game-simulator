@@ -1,6 +1,4 @@
-package own;
-
-import basic.Move;
+package NGPlayerTools;
 
 /**
  * Created by Nils on 13.05.2017.

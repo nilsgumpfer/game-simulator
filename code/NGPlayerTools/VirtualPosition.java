@@ -1,4 +1,4 @@
-package own;
+package NGPlayerTools;
 
 import basic.Move;
 
