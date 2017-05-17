@@ -48,7 +48,7 @@ public class FirstMoveConsultant extends AMoveConsultant
         if(position != null)
             finalMove = position.generateMoveForThisPosition();
 
-        virtualGameBoard.printScores();
+        //virtualGameBoard.printScores();
 
         // cleanup to be ready for following requests in future
         PotentialManager.reset(virtualGameBoard);

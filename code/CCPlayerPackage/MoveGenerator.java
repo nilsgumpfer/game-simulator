@@ -194,6 +194,40 @@ public class MoveGenerator {
             }
         }
 
+        //DIAGONAL TOP RIGHT - 2 coins with empty fields on left & right
+        for(int i = 0; i < winnableChains.size(); i++) {
+            if (winnableChains.get(i).getChainType() == ChainType.DIAGONAL_TOP_RIGHT && winnableChains.get(i).getSize() == 2) {
+                if(winnableChains.get(i).getEndPositionCol() + 1 < 7 && winnableChains.get(i).getEndPositionRow() - 1 >= 0){
+                    if (manager.getPlayerEnumAtPosition(winnableChains.get(i).getEndPositionRow()-1, winnableChains.get(i).getEndPositionCol() + 1) != null) {
+                        if (manager.getPlayerEnumAtPosition(winnableChains.get(i).getEndPositionRow()-1, winnableChains.get(i).getEndPositionCol() + 1) == PlayerEnum.EMPTY) {
+                            if (manager.getPlayerEnumAtPosition(winnableChains.get(i).getEndPositionRow()-2, winnableChains.get(i).getEndPositionCol() + 2) != null) {
+                                if (manager.getPlayerEnumAtPosition(winnableChains.get(i).getEndPositionRow()-2, winnableChains.get(i).getEndPositionCol() + 2) == PlayerEnum.OWN) {
+                                    return getMoveOfColumn(winnableChains.get(i).getEndPositionCol()+1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        //DIAGONAL TOP LEFT - 2 coins with empty fields on left & right
+        for(int i = 0; i < winnableChains.size(); i++) {
+            if (winnableChains.get(i).getChainType() == ChainType.DIAGONAL_TOP_RIGHT && winnableChains.get(i).getSize() == 2) {
+                if(winnableChains.get(i).getEndPositionCol() -1 >= 0 && winnableChains.get(i).getEndPositionRow() - 1 >= 0){
+                    if (manager.getPlayerEnumAtPosition(winnableChains.get(i).getEndPositionRow()-1, winnableChains.get(i).getEndPositionCol() - 1) != null) {
+                        if (manager.getPlayerEnumAtPosition(winnableChains.get(i).getEndPositionRow()-1, winnableChains.get(i).getEndPositionCol() - 1) == PlayerEnum.EMPTY) {
+                            if (manager.getPlayerEnumAtPosition(winnableChains.get(i).getEndPositionRow()-2, winnableChains.get(i).getEndPositionCol() - 2) != null) {
+                                if (manager.getPlayerEnumAtPosition(winnableChains.get(i).getEndPositionRow()-2, winnableChains.get(i).getEndPositionCol() - 2) == PlayerEnum.OWN) {
+                                    return getMoveOfColumn(winnableChains.get(i).getEndPositionCol()-1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         //NO WINMOVE FOUND
         return null;
     }
@@ -353,6 +387,77 @@ public class MoveGenerator {
             }
         }
 
+        //DIAGONAL TOP RIGHT - 2 coins with empty fields on left & right
+        for(int i = 0; i < harmfulEnemyMoves.size(); i++) {
+            if (harmfulEnemyMoves.get(i).getChainType() == ChainType.DIAGONAL_TOP_RIGHT && harmfulEnemyMoves.get(i).getSize() == 2) {
+                if(harmfulEnemyMoves.get(i).getEndPositionCol() + 1 < 7 && harmfulEnemyMoves.get(i).getEndPositionRow() - 1 >= 0){
+                    if (manager.getPlayerEnumAtPosition(harmfulEnemyMoves.get(i).getEndPositionRow()-1, harmfulEnemyMoves.get(i).getEndPositionCol() + 1) != null) {
+                        if (manager.getPlayerEnumAtPosition(harmfulEnemyMoves.get(i).getEndPositionRow()-1, harmfulEnemyMoves.get(i).getEndPositionCol() + 1) == PlayerEnum.EMPTY) {
+                            if (manager.getPlayerEnumAtPosition(harmfulEnemyMoves.get(i).getEndPositionRow()-2, harmfulEnemyMoves.get(i).getEndPositionCol() + 2) != null) {
+                                if (manager.getPlayerEnumAtPosition(harmfulEnemyMoves.get(i).getEndPositionRow()-2, harmfulEnemyMoves.get(i).getEndPositionCol() + 2) == PlayerEnum.RIVAL) {
+                                        return getMoveOfColumn(harmfulEnemyMoves.get(i).getEndPositionCol()+1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        //DIAGONAL TOP LEFT - 2 coins with empty fields on left & right
+        for(int i = 0; i < harmfulEnemyMoves.size(); i++) {
+            if (harmfulEnemyMoves.get(i).getChainType() == ChainType.DIAGONAL_TOP_RIGHT && harmfulEnemyMoves.get(i).getSize() == 2) {
+                if(harmfulEnemyMoves.get(i).getEndPositionCol() -1 >= 0 && harmfulEnemyMoves.get(i).getEndPositionRow() - 1 >= 0){
+                    if (manager.getPlayerEnumAtPosition(harmfulEnemyMoves.get(i).getEndPositionRow()-1, harmfulEnemyMoves.get(i).getEndPositionCol() - 1) != null) {
+                        if (manager.getPlayerEnumAtPosition(harmfulEnemyMoves.get(i).getEndPositionRow()-1, harmfulEnemyMoves.get(i).getEndPositionCol() - 1) == PlayerEnum.EMPTY) {
+                            if (manager.getPlayerEnumAtPosition(harmfulEnemyMoves.get(i).getEndPositionRow()-2, harmfulEnemyMoves.get(i).getEndPositionCol() - 2) != null) {
+                                if (manager.getPlayerEnumAtPosition(harmfulEnemyMoves.get(i).getEndPositionRow()-2, harmfulEnemyMoves.get(i).getEndPositionCol() - 2) == PlayerEnum.RIVAL) {
+                                    return getMoveOfColumn(harmfulEnemyMoves.get(i).getEndPositionCol()-1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+//
+//        //DIAGONAL BOTTOM LEFT - 2 coins with empty fields on left & right
+//        for(int i = 0; i < harmfulEnemyMoves.size(); i++) {
+//            if (harmfulEnemyMoves.get(i).getChainType() == ChainType.DIAGONAL_TOP_RIGHT && harmfulEnemyMoves.get(i).getSize() == 2) {
+//                if(harmfulEnemyMoves.get(i).getEndPositionCol() + 1 < 7 && harmfulEnemyMoves.get(i).getEndPositionRow() - 1 >= 0){
+//                    if (manager.getPlayerEnumAtPosition(harmfulEnemyMoves.get(i).getEndPositionRow()-1, harmfulEnemyMoves.get(i).getEndPositionCol() + 1) != null) {
+//                        if (manager.getPlayerEnumAtPosition(harmfulEnemyMoves.get(i).getEndPositionRow()-1, harmfulEnemyMoves.get(i).getEndPositionCol() + 1) == PlayerEnum.EMPTY) {
+//                            if (manager.getPlayerEnumAtPosition(harmfulEnemyMoves.get(i).getEndPositionRow()-2, harmfulEnemyMoves.get(i).getEndPositionCol() + 2) != null) {
+//                                if (manager.getPlayerEnumAtPosition(harmfulEnemyMoves.get(i).getEndPositionRow()-2, harmfulEnemyMoves.get(i).getEndPositionCol() + 2) == PlayerEnum.RIVAL) {
+//                                    return getMoveOfColumn(harmfulEnemyMoves.get(i).getEndPositionCol()+1);
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        //DIAGONAL BOTTOM RIGHT - 2 coins with empty fields on left & right
+//        for(int i = 0; i < harmfulEnemyMoves.size(); i++) {
+//            if (harmfulEnemyMoves.get(i).getChainType() == ChainType.DIAGONAL_TOP_RIGHT && harmfulEnemyMoves.get(i).getSize() == 2) {
+//                if(harmfulEnemyMoves.get(i).getEndPositionCol() + 1 < 7 && harmfulEnemyMoves.get(i).getEndPositionRow() - 1 >= 0){
+//                    if (manager.getPlayerEnumAtPosition(harmfulEnemyMoves.get(i).getEndPositionRow()-1, harmfulEnemyMoves.get(i).getEndPositionCol() + 1) != null) {
+//                        if (manager.getPlayerEnumAtPosition(harmfulEnemyMoves.get(i).getEndPositionRow()-1, harmfulEnemyMoves.get(i).getEndPositionCol() + 1) == PlayerEnum.EMPTY) {
+//                            if (manager.getPlayerEnumAtPosition(harmfulEnemyMoves.get(i).getEndPositionRow()-2, harmfulEnemyMoves.get(i).getEndPositionCol() + 2) != null) {
+//                                if (manager.getPlayerEnumAtPosition(harmfulEnemyMoves.get(i).getEndPositionRow()-2, harmfulEnemyMoves.get(i).getEndPositionCol() + 2) == PlayerEnum.RIVAL) {
+//                                    return getMoveOfColumn(harmfulEnemyMoves.get(i).getEndPositionCol()+1);
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+        
+        
+        
+        
         //HORIZONTAL
         for(int i = 0; i < harmfulEnemyMoves.size(); i++) {
             //chainSize: 3
