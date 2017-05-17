@@ -83,4 +83,11 @@ public class PotentialManager {
                 virtualPotential.getVirtualPosition().resetPotentialScore();
         }
     }
+/*
+    private static void scorePotentialsBetweenTwoSameCoins(VirtualGameBoard virtualGameBoard){
+        for (List<VirtualPosition> columnList:virtualGameBoard.getListOfColumns())
+        {
+            for (VirtualPosition virtualPosition:columnList)
+            {
+    }*/
 }

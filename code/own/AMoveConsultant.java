@@ -19,9 +19,6 @@ public abstract class AMoveConsultant
         if(move != null) {
             int columnIndex = MyHelper.extractColumnIndex(move);
             virtualGameBoard.addCoinToColumn(columnIndex, playerColor);
-
-            // print current status of board
-            System.out.println(virtualGameBoard);
         }
     }
 }

@@ -150,7 +150,7 @@ public class PatternScanner {
                         }
 
                         // go on only if pattern was found
-                        if(chainLength > 1)
+                        if(chainLength >= MyHelper.chainLengthTreshold_Vertical)
                         {
                             // generate new pattern-object and save it
                             listOfVirtualPatterns.add(new VirtualPattern(PatternType.Vertical, patternStartPosition, patternEndPosition, virtualGameBoard, chainLength, playerColor, ScanDirection.TopToBottom));
@@ -234,7 +234,7 @@ public class PatternScanner {
                         }
 
                         // go on only if pattern was found
-                        if(chainLength > 1)
+                        if(chainLength >= MyHelper.chainLengthTreshold_Horizontal)
                         {
                             // generate new pattern-object and save it
                             listOfVirtualPatterns.add(new VirtualPattern(PatternType.Horizontal, patternStartPosition, patternEndPosition, virtualGameBoard, chainLength, playerColor, ScanDirection.LeftToRight));
@@ -343,7 +343,7 @@ public class PatternScanner {
                         }
 
                         // go on only if pattern was found
-                        if(chainLength > 1)
+                        if(chainLength >= MyHelper.chainLengthTreshold_Diagonal)
                         {
                             // generate new pattern-object and save it
                             listOfVirtualPatterns.add(new VirtualPattern(PatternType.Diagonal, patternStartPosition, patternEndPosition, virtualGameBoard, chainLength, playerColor, scanDirection));

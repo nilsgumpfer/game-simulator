@@ -22,35 +22,30 @@ public class FirstMoveConsultant extends AMoveConsultant
 
     @Override
     public Move getBestPossibleMove(List<Move> possibleMoves) {
-        // TODO: act like this: if own potentials present, grow them. if rival potentials present, block them. if only one of them present, act same.
-        // consider blocking rival potentials only if critical (=3), block just at last moment, grow own potential from first point
+
+        MyHelper.chainLengthTreshold_Vertical = 1; // should patterns have at least 2 coins to be detected, etc.?
+        MyHelper.chainLengthTreshold_Horizontal = 2; // should patterns have at least 2 coins to be detected, etc.?
+        MyHelper.chainLengthTreshold_Diagonal = 2; // should patterns have at least 2 coins to be detected, etc.?
 
         List<Integer> listOfPossibleColumns = MyHelper.extractPossibleColumnNumbers(possibleMoves);
+
+        // this is the standard-move: middle position of possible columns
+        // TODO: this is currently dumb - consider sourcing this out to potential manager: he can look at game situation and position coins on existing ones, etc.
         Move finalMove = new Move(listOfPossibleColumns.get(listOfPossibleColumns.size()/2));
 
         // scan for all potentials of rival, planning to block them
-        List<VirtualPattern> rivalPotential = scanHighPotentialPatterns(virtualGameBoard, PlayerColor.Rival);
+        List<VirtualPattern> rivalPotentials = PatternScanner.scanForAllPatternsForColor(virtualGameBoard, PlayerColor.Rival, true);
 
         // scan for all own potentials, planning to grow them
-        List<VirtualPattern> ownPotential = scanHighPotentialPatterns(virtualGameBoard, PlayerColor.Own);
+        List<VirtualPattern> ownPotentials = PatternScanner.scanForAllPatternsForColor(virtualGameBoard, PlayerColor.Own, true);
 
-        /******************************************************************************************************/
-        /*
-        // concat all patterns for displaying
-        List<VirtualPattern> allPatterns = new ArrayList<>();
-        allPatterns.addAll(rivalPotential);
-        allPatterns.addAll(ownPotential);
-
-        // print recognized patterns
-        System.out.println("Recognized critical patterns: ");
-        for (VirtualPattern virtualPattern:allPatterns) {
-            System.out.println(virtualPattern);
-        }*/
-        /******************************************************************************************************/
-
+        // focus on potentials that are relevant for this move, future: consider smart "building"
         PotentialManager.filterOutPotentialsWithGapGreaterThan(0);
 
+        // let potentialManager chose the highest available potential
         VirtualPosition position = PotentialManager.getHighestPotential(virtualGameBoard);
+
+        // check if sth. was found - if not, use std. position
         if(position != null)
             finalMove = position.generateMoveForThisPosition();
 

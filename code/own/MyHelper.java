@@ -9,6 +9,10 @@ import java.util.List;
  * Created by Nils on 30.04.2017.
  */
 public class MyHelper {
+    public static int chainLengthTreshold_Vertical      = 2;
+    public static int chainLengthTreshold_Horizontal    = 2;
+    public static int chainLengthTreshold_Diagonal      = 2;
+
     public static int extractColumnIndex(Move move)
     {
         if(move != null) {
@@ -166,7 +170,7 @@ public class MyHelper {
             if(currentPosition.getPlayerColor() == PlayerColor.Empty) {
                 // in case only one coin left to complete
                 if(chainLength == 3 && potential == 3)
-                    tmpPotential = 10; // set some arbitrary high value, e.g. mass of sun, etc.
+                    tmpPotential = 100; // set some arbitrary high value, e.g. mass of sun, etc.
                 else
                     tmpPotential = potential;
 
@@ -185,8 +189,9 @@ public class MyHelper {
                 distance++;
                 potential--;
             }
-            else if(currentPosition.getPlayerColor() != startPosition.getPlayerColor())
+            else if(currentPosition.getPlayerColor() != startPosition.getPlayerColor()) {
                 break;
+            }
 
             iV = nextVerticalIndex(iV,scanDirection);
             iH = nextHorizontalIndex(iH,scanDirection);

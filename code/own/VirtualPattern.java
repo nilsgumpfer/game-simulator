@@ -28,12 +28,12 @@ public class VirtualPattern {
         this.scanDirection      = scanDirection;
         listOfPotentials        = MyHelper.scanPotentialsOfPattern(this);
         this.patternType        = MyHelper.redefinePatternType(this);
-        potentialRating         = MyHelper.scorePotentialOfPattern(this);
+        //potentialRating         = MyHelper.scorePotentialOfPattern(this);
         isCompletableToFour     = MyHelper.checkCompleteability(this);
 
         PotentialManager.incorporatePotentials(listOfPotentials);
 
-        System.out.println("new Pattern:" + this);
+        //System.out.println("new Pattern:" + this);
     }
 
     public VirtualPosition getStartPosition() {

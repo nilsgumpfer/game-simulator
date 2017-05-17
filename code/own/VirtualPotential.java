@@ -22,7 +22,7 @@ public class VirtualPotential {
         this.potentialScore             = potentialScore;
         //TODO: set potential score
 
-        System.out.println("-> new Potential:" + this);
+        //System.out.println("-> new Potential:" + this);
     }
 
     public ScanDirection getScanDirection() {
